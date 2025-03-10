@@ -66,7 +66,7 @@ export default {
 				player: {
 					bg: 'transparent',
 					accent: '#0066CC',
-					button: '#ffffff',
+					button: 'transparent', // Changed from #ffffff to transparent
 					progress: 'rgba(0, 102, 204, 0.8)',
 					shadow: 'rgba(0, 0, 0, 0.05)'
 				}

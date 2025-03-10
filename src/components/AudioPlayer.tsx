@@ -138,10 +138,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, className }) => {
               />
             </svg>
             
-            {/* Square button */}
+            {/* Square button - now with transparent background */}
             <button
               onClick={togglePlayPause}
-              className="play-button w-10 h-10 flex items-center justify-center bg-player-button rounded-sm shadow-md focus:outline-none z-10"
+              className="play-button w-10 h-10 flex items-center justify-center bg-transparent rounded-sm focus:outline-none z-10"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (
