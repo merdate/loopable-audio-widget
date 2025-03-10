@@ -46,8 +46,8 @@ const Index = () => {
               <pre className="mt-2 p-3 bg-gray-100 rounded text-xs overflow-x-auto">
                 {`<iframe 
   src="YOUR_DEPLOYED_URL" 
-  width="100%" 
-  height="180" 
+  width="80" 
+  height="80" 
   frameborder="0" 
   allow="autoplay" 
   class="audio-player-iframe">

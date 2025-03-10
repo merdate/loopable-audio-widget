@@ -64,7 +64,7 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				player: {
-					bg: '#f5f5f7',
+					bg: 'transparent',
 					accent: '#0066CC',
 					button: '#ffffff',
 					progress: 'rgba(0, 102, 204, 0.8)',

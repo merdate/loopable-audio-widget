@@ -1,7 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause } from 'lucide-react';
-import ProgressBar from './ProgressBar';
+import { Play, Pause, Square } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface AudioPlayerProps {
@@ -17,6 +16,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, className }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const animationRef = useRef<number | null>(null);
 
+  // Calculate progress percentage
+  const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
+  
   // Function to toggle play/pause
   const togglePlayPause = () => {
     if (!audioRef.current) return;
@@ -28,14 +30,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, className }) => {
     }
     
     setIsPlaying(!isPlaying);
-  };
-
-  // Handle seeking
-  const handleSeek = (time: number) => {
-    if (!audioRef.current) return;
-    
-    audioRef.current.currentTime = time;
-    setCurrentTime(time);
   };
 
   // Update progress in real-time while playing
@@ -87,9 +81,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, className }) => {
     };
   }, []);
 
+  // Calculate the stroke dash properties for the circular progress
+  const circleRadius = 28;
+  const circleCircumference = 2 * Math.PI * circleRadius;
+  const strokeDashoffset = circleCircumference - (progressPercentage / 100) * circleCircumference;
+
   return (
     <div className={cn(
-      "audio-player-container p-6 bg-player-bg rounded-2xl shadow-md backdrop-blur-sm transition-all duration-300 max-w-md w-full mx-auto animate-fade-in",
+      "audio-player-container p-3 bg-player-bg rounded-md shadow-sm backdrop-blur-sm transition-all duration-300 max-w-md mx-auto animate-fade-in",
       isLoaded ? "opacity-100" : "opacity-90",
       className
     )}>
@@ -104,54 +103,58 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, className }) => {
       
       {/* Loading state */}
       {!isLoaded && (
-        <div className="flex flex-col items-center justify-center space-y-4 py-4">
-          <div className="w-12 h-12 rounded-full bg-black/5 animate-pulse"></div>
-          <div className="w-full h-1.5 rounded-full bg-black/5 animate-pulse"></div>
+        <div className="flex items-center justify-center w-14 h-14 rounded-md mx-auto">
+          <div className="w-10 h-10 rounded-sm bg-black/5 animate-pulse"></div>
         </div>
       )}
       
-      {/* Loaded state */}
+      {/* Loaded state - Square button with circular progress */}
       {isLoaded && (
-        <div className="flex flex-col space-y-6">
-          <button
-            onClick={togglePlayPause}
-            className="play-button mx-auto w-16 h-16 flex items-center justify-center bg-player-button rounded-full shadow-lg focus:outline-none"
-            aria-label={isPlaying ? "Pause" : "Play"}
-          >
-            {isPlaying ? (
-              <Pause className="text-player-accent w-8 h-8" />
-            ) : (
-              <Play className="text-player-accent w-8 h-8 ml-1" />
-            )}
-          </button>
-          
-          <div className="space-y-2">
-            <ProgressBar 
-              duration={duration}
-              currentTime={currentTime}
-              onSeek={handleSeek}
-              isPlaying={isPlaying}
-            />
+        <div className="flex items-center justify-center">
+          <div className="relative w-14 h-14 flex items-center justify-center">
+            {/* Circular progress indicator */}
+            <svg className="absolute top-0 left-0 -rotate-90 w-full h-full" viewBox="0 0 64 64">
+              {/* Background circle */}
+              <circle 
+                cx="32" 
+                cy="32" 
+                r={circleRadius} 
+                fill="none" 
+                stroke="rgba(0,0,0,0.1)" 
+                strokeWidth="4"
+              />
+              {/* Progress circle */}
+              <circle 
+                cx="32" 
+                cy="32" 
+                r={circleRadius} 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="4" 
+                strokeLinecap="round"
+                strokeDasharray={circleCircumference} 
+                strokeDashoffset={strokeDashoffset}
+                className="text-player-accent transition-all duration-100"
+              />
+            </svg>
             
-            <div className="flex justify-between text-xs text-gray-500 font-medium">
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
-            </div>
+            {/* Square button */}
+            <button
+              onClick={togglePlayPause}
+              className="play-button w-10 h-10 flex items-center justify-center bg-player-button rounded-sm shadow-md focus:outline-none z-10"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? (
+                <Pause className="text-player-accent w-5 h-5" />
+              ) : (
+                <Play className="text-player-accent w-5 h-5 ml-0.5" />
+              )}
+            </button>
           </div>
         </div>
       )}
     </div>
   );
-};
-
-// Helper function to format time in mm:ss
-const formatTime = (seconds: number): string => {
-  if (isNaN(seconds)) return '00:00';
-  
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-  
-  return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
 export default AudioPlayer;
