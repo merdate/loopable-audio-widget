@@ -65,9 +65,9 @@ export default {
 				},
 				player: {
 					bg: 'transparent',
-					accent: '#0066CC',
-					button: 'transparent', // Changed from #ffffff to transparent
-					progress: 'rgba(0, 102, 204, 0.8)',
+					accent: '#a2f900', // Changed to yellow (#a2f900)
+					button: 'transparent',
+					progress: 'rgba(162, 249, 0, 0.8)', // Changed to semi-transparent yellow
 					shadow: 'rgba(0, 0, 0, 0.05)'
 				}
 			},

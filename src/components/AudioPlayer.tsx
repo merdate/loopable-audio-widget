@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Square } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface AudioPlayerProps {
@@ -138,16 +138,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc, className }) => {
               />
             </svg>
             
-            {/* Square button - now with transparent background */}
+            {/* Square button with transparent background */}
             <button
               onClick={togglePlayPause}
               className="play-button w-10 h-10 flex items-center justify-center bg-transparent rounded-sm focus:outline-none z-10"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (
-                <Pause className="text-player-accent w-5 h-5" />
+                <Pause className="text-black w-5 h-5" />
               ) : (
-                <Play className="text-player-accent w-5 h-5 ml-0.5" />
+                <Play className="text-black w-5 h-5 ml-0.5" />
               )}
             </button>
           </div>
